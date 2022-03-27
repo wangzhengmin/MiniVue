@@ -1,5 +1,5 @@
 import { pushTarget, popTarget } from "./dep";
-
+import {queueWatcher} from "./scheduler.js"
 // 全局变量id  每次new Watcher都会自增
 let id = 0;
 
@@ -36,6 +36,10 @@ export default class Watcher {
   }
   //   这里简单的就执行以下get方法  之后涉及到计算属性就不一样了
   update() {
+    queueWatcher(this);
+  }
+  run() {
+    // 真正的触发更新
     this.get();
   }
 }

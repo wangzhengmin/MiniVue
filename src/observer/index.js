@@ -1,7 +1,7 @@
-// src/observer/index.js
-import Dep from "./Dep";
+import Dep from "./dep.js";
+
 // Object.defineProperty数据劫持核心 兼容性在ie9以及以上
-export default function defineReactive(data, key, value) {
+function defineReactive(data, key, value) {
   let childOb = observe(value); // childOb就是Observer实例
 
   let dep = new Dep(); // 为每个属性实例化一个Dep
@@ -46,5 +46,30 @@ function dependArray(value) {
       // 如果数组里面还有数组  就递归去收集依赖
       dependArray(e);
     }
+  }
+}
+
+class Observer {
+  // 观测值
+  constructor(value) {
+    this.walk(value);
+  }
+  walk(data) {
+    // 对象上的所有属性依次进行观测
+    let keys = Object.keys(data);
+    for (let i = 0; i < keys.length; i++) {
+      let key = keys[i];
+      let value = data[key];
+      defineReactive(data, key, value);
+    }
+  }
+}
+export function observe(value) {
+  // 如果传过来的是对象或者数组 进行属性劫持
+  if (
+    Object.prototype.toString.call(value) === "[object Object]" ||
+    Array.isArray(value)
+  ) {
+    return new Observer(value);
   }
 }

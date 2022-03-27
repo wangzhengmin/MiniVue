@@ -1,5 +1,3 @@
-// src/observer/dep.js
-
 // dep和watcher是多对多的关系
 // 每个属性都有自己的dep
 let id = 0; //dep实例的唯一标识
